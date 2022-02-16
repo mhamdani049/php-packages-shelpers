@@ -1,0 +1,17 @@
+{
+    "name": "myhamdani/shelpers",
+    "description": "Packages shelpers for development",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Myhamdani\\Shelpers\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "TIF - Muhamad Yusup Hamdani (YPH)",
+            "email": "myhamdani1014@pnm.co.id"
+        }
+    ],
+    "require": {}
+}
