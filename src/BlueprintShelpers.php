@@ -1,5 +1,5 @@
 <?php
-namespace Mhamdani049\Shelpers;
+namespace Myhamdani\Shelpers;
 
 use Exception;
 
