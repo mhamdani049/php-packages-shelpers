@@ -4,14 +4,16 @@ namespace Myhamdani\Shelpers;
 use Exception;
 
 class BlueprintShelpers {
+
     /**
      * @param $request
      * @param $model
+     * @param $select
      * @param $currentUser
      * @return array
      * @throws Exception
      */
-    public static function find($request, $model, $currentUser): array
+    public static function find($request, $model, $select, $currentUser): array
     {
         $params = $request->all();
         $metadata = null;
@@ -19,6 +21,7 @@ class BlueprintShelpers {
         try {
             $data = $model;
             // if (isset($currentUser) && $currentUser['level'] == 'member') $data->where('CREATED_BY', $currentUser['user']);
+            if ($select != '*') $data = $data->select($select);
             if (isset($params['collect'])) {
                 $collect = explode(',', $params['collect']);
                 if ((count($collect) > 0)) foreach($collect as $value) $data = $data->with($value);
