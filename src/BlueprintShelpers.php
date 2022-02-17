@@ -57,7 +57,14 @@ class BlueprintShelpers {
                 $metadata = (object)array("skip" => (int)$params['skip'], "limit" => (int)$params['limit'], "nowrows" => $data->count());
             }
 
-            if ($source == 'datatables') return array('data' => DataTables::eloquent($data)->toJson());
+            if ($source == 'datatables') {
+                return array('data' => Datatables::of($data)
+                    ->with([
+                        "recordsTotal" => $metadata->nowrows,
+                        "recordsFiltered" => $data->count(),
+                    ])
+                    ->make(true)->original);
+            }
             $data = $data->get();
             return array("data" => $data, "metadata" => $metadata);
         } catch (Exception $e) {
