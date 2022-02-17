@@ -2,6 +2,7 @@
 namespace Myhamdani\Shelpers;
 
 use Exception;
+use Yajra\DataTables\Facades\DataTables;
 
 class BlueprintShelpers {
 
@@ -10,10 +11,11 @@ class BlueprintShelpers {
      * @param $model
      * @param $select
      * @param $currentUser
+     * @param $source
      * @return array
      * @throws Exception
      */
-    public static function find($request, $model, $select, $currentUser): array
+    public static function find($request, $model, $select, $currentUser, $source): array
     {
         $params = $request->all();
         $metadata = null;
@@ -55,6 +57,7 @@ class BlueprintShelpers {
                 $metadata = (object)array("skip" => (int)$params['skip'], "limit" => (int)$params['limit'], "nowrows" => $data->count());
             }
 
+            if ($source == 'datatables') return array('data' => DataTables::eloquent($data)->toJson());
             $data = $data->get();
             return array("data" => $data, "metadata" => $metadata);
         } catch (Exception $e) {
