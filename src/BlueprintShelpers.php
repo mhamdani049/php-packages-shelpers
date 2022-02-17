@@ -61,7 +61,7 @@ class BlueprintShelpers {
                 return array('data' => Datatables::of($data)
                     ->with([
                         "recordsTotal" => $metadata->nowrows,
-                        "recordsFiltered" => $data->count(),
+                        "recordsFiltered" => count($data->get()),
                     ])
                     ->make(true)->original);
             }
