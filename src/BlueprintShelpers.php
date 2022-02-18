@@ -54,8 +54,8 @@ class BlueprintShelpers {
                 else $data = self::formatSort($data, $params['sort']);
             }
             if (isset($params['skip']) && isset($params['limit'])) {
-                $data = $data->take((int)$params['limit'])->skip((int)$params['skip']);
                 $metadata = (object)array("skip" => (int)$params['skip'], "limit" => (int)$params['limit'], "nowrows" => $data->get()->count());
+                $data = $data->take((int)$params['limit'])->skip((int)$params['skip']);
             }
 
             if ($source == 'datatables') {
