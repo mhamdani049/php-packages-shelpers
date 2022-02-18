@@ -8,6 +8,7 @@ class BlueprintShelpers {
 
     /**
      * @param $request
+     * @param $queryParams
      * @param $model
      * @param $select
      * @param $currentUser
@@ -15,7 +16,7 @@ class BlueprintShelpers {
      * @return array
      * @throws Exception
      */
-    public static function find($request, $model, $select, $currentUser, $source): array
+    public static function find($request, $queryParams, $model, $select, $currentUser, $source): array
     {
         $params = $request->all();
         $metadata = null;
@@ -53,15 +54,15 @@ class BlueprintShelpers {
                 else $data = self::formatSort($data, $params['sort']);
             }
             if (isset($params['skip']) && isset($params['limit'])) {
-                $data = $data->skip((int)$params['skip'])->take((int)$params['limit']);
-                $metadata = (object)array("skip" => (int)$params['skip'], "limit" => (int)$params['limit'], "nowrows" => $data->count());
+                $data = $data->take((int)$params['limit'])->skip((int)$params['skip']);
+                $metadata = (object)array("skip" => (int)$params['skip'], "limit" => (int)$params['limit'], "nowrows" => $data->get()->count());
             }
 
             if ($source == 'datatables') {
                 return array('data' => Datatables::of($data)
                     ->with([
                         "recordsTotal" => $metadata->nowrows,
-                        "recordsFiltered" => count($data->get()),
+                        "recordsFiltered" => $data->get()->count(),
                     ])
                     ->make(true)->original);
             }
@@ -74,11 +75,13 @@ class BlueprintShelpers {
 
     /**
      * @param $id
+     * @param $queryParams
      * @param $model
+     * @param $user
      * @return mixed
      * @throws Exception
      */
-    public static function findOne($id, $model) {
+    public static function findOne($id, $queryParams, $model, $user) {
         try {
             $data = $model->find($id);
         } catch (Exception $e) {
