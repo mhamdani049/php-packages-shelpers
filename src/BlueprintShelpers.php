@@ -58,7 +58,7 @@ class BlueprintShelpers {
                 $data = $data->take((int)$params['limit'])->skip((int)$params['skip']);
             }
 
-            if ($source == 'datatables') {
+            if ($source == 'datatables' && isset($params['skip']) && isset($params['limit'])) {
                 return array('data' => Datatables::of($data)
                     ->with([
                         "recordsTotal" => $metadata->nowrows,
