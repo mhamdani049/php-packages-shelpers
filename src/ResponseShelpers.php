@@ -8,6 +8,7 @@ class ResponseShelpers {
     public static function generate($data = [], $message = "", $code = "00", $status = "success", $metadata = null): JsonResponse
     {
         $responseCode = ($status == "success") ? 200 : 400;
+        if ($status == "unauthorized") $responseCode = 401;
         $responseData = [
             'STATUS' => $status,
             'CODE' => (string) $code,
