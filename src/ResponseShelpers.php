@@ -3,6 +3,7 @@ namespace Myhamdani\Shelpers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Log;
 
 class ResponseShelpers {
     public static function generate($data = [], $message = "", $code = "00", $status = "success", $metadata = null): JsonResponse
@@ -38,14 +39,18 @@ class ResponseShelpers {
         }
 
         if (!$response) {
-            return response()->json([
+            $responseJson = response()->json([
                 'STATUS' => 'FALSE',
                 'CODE' => '10',
                 'MESSAGE' => Lang::get("global.somethingWentWrong"),
                 'DATA' => null
             ], 400);
+
+            Log::info(json_encode($responseJson));
+            return $responseJson;
         }
 
+        Log::info(json_encode($response));
         return $response;
     }
 }
