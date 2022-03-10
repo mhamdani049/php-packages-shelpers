@@ -20,7 +20,7 @@ class ResponseShelpers {
         return response()->json($responseData, $responseCode);
     }
 
-    public static function grsp($rawResult)
+    public static function grsp($exec = null, $paramsExec = [], $rawResult)
     {
         $response = null;
         foreach($rawResult as $x) {
@@ -46,11 +46,11 @@ class ResponseShelpers {
                 'DATA' => null
             ], 400);
 
-            Log::info(json_encode($responseJson));
+            Log::info("SP : " . $exec . ' - Params: ' . json_encode($paramsExec) . ' - Response: error - ' . json_encode($responseJson));
             return $responseJson;
         }
 
-        Log::info(json_encode($response));
+        Log::info("SP : " . $exec . ' - Params: ' . json_encode($paramsExec) . ' - Response: success - ' . json_encode($response));
         return $response;
     }
 }
