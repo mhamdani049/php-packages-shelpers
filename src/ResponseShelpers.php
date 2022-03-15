@@ -25,7 +25,7 @@ class ResponseShelpers {
         $response = null;
         foreach($rawResult as $x) {
             if (is_object($x)) {
-                if (isset($x->STATUS)) {
+                if (isset($x->STATUS) || isset($x->USERNAME)) {
                     $response = $x;
                 }
                 else {
