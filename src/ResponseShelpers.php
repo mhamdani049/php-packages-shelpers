@@ -23,35 +23,39 @@ class ResponseShelpers {
     public static function grsp($exec = null, $paramsExec = [], $rawResult)
     {
         $response = null;
+        
         if (count($rawResult) > 1) {
             $response = $rawResult;
-        } else {
-            foreach($rawResult as $x) {
-                if (is_object($x)) {
-                    if (isset($x->STATUS) || isset($x->USERNAME)) {
-                        $response = $x;
-                    }
-                    else {
-                        foreach($x as $b) {
-                            $response = json_decode($b)[0];
-                        }
-                    }
-                } else {
+            
+            Log::info("SP : " . $exec . ' - Params: ' . json_encode($paramsExec) . ' - Response: success - ' . json_encode($response));
+            return $response;
+        }
+        
+        foreach($rawResult as $x) {
+            if (is_object($x)) {
+                if (isset($x->STATUS) || isset($x->USERNAME)) {
                     $response = $x;
                 }
+                else {
+                    foreach($x as $b) {
+                        $response = json_decode($b)[0];
+                    }
+                }
+            } else {
+                $response = $x;
             }
+        }
 
-            if (!$response) {
-                $responseJson = response()->json([
-                    'STATUS' => 'FALSE',
-                    'CODE' => '10',
-                    'MESSAGE' => Lang::get("global.somethingWentWrong"),
-                    'DATA' => null
-                ], 400);
+        if (!$response) {
+            $responseJson = response()->json([
+                'STATUS' => 'FALSE',
+                'CODE' => '10',
+                'MESSAGE' => Lang::get("global.somethingWentWrong"),
+                'DATA' => null
+            ], 400);
 
-                Log::info("SP : " . $exec . ' - Params: ' . json_encode($paramsExec) . ' - Response: error - ' . json_encode($responseJson));
-                return $responseJson;
-            }   
+            Log::info("SP : " . $exec . ' - Params: ' . json_encode($paramsExec) . ' - Response: error - ' . json_encode($responseJson));
+            return $responseJson;
         }
 
         Log::info("SP : " . $exec . ' - Params: ' . json_encode($paramsExec) . ' - Response: success - ' . json_encode($response));
