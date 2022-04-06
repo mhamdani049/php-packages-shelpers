@@ -38,7 +38,11 @@ class ResponseShelpers {
                 }
                 else {
                     foreach($x as $b) {
-                        $response = json_decode($b)[0];
+                        try {
+                            $response = json_decode($b)[0];
+                        } catch (\Throwable $th) {
+                            $response = $x;
+                        }
                     }
                 }
             } else {
