@@ -41,7 +41,7 @@ class ResponseShelpers {
                         try {
                             $response = json_decode($b)[0];
                         } catch (\Throwable $th) {
-                            $response = $x;
+                            $response = $rawResult;
                         }
                     }
                 }
