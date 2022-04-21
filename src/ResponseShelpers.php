@@ -23,11 +23,16 @@ class ResponseShelpers {
     public static function grsp($exec = null, $paramsExec = [], $rawResult, $user = null)
     {
         $response = null;
+        $username = null;
+        
+        if (isset($user['username'])) {
+            $username = $user['username'];
+        }
         
         if (count($rawResult) > 1) {
             $response = $rawResult;
             
-            Log::info("SP : " . $exec . ' - Params: ' . json_encode($paramsExec) . ' - Response: success - ' . json_encode($response) . ' - Request By: ' . json_encode($user));
+            Log::info("SP : " . $exec . ' - Params: ' . json_encode($paramsExec) . ' - Response: success - ' . json_encode($response) . ' - Request By: ' . $username);
             return $response;
         }
         
@@ -58,11 +63,11 @@ class ResponseShelpers {
                 'DATA' => null
             ], 400);
 
-            Log::info("SP : " . $exec . ' - Params: ' . json_encode($paramsExec) . ' - Response: error - ' . json_encode($responseJson) . ' - Request By: ' . json_encode($user));
+            Log::info("SP : " . $exec . ' - Params: ' . json_encode($paramsExec) . ' - Response: error - ' . json_encode($responseJson) . ' - Request By: ' . $username);
             return $responseJson;
         }
 
-        Log::info("SP : " . $exec . ' - Params: ' . json_encode($paramsExec) . ' - Response: success - ' . json_encode($response) . ' - Request By: ' . json_encode($user));
+        Log::info("SP : " . $exec . ' - Params: ' . json_encode($paramsExec) . ' - Response: success - ' . json_encode($response) . ' - Request By: ' . $username);
         return $response;
     }
 }
