@@ -1,6 +1,7 @@
 <?php
 namespace Myhamdani\Shelpers;
 
+use App\Services\AuditService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Log;
@@ -8,6 +9,8 @@ use Illuminate\Support\Facades\Log;
 class ResponseShelpers {
     public static function generate($data = [], $message = "", $code = "00", $status = "success", $metadata = null): JsonResponse
     {
+        $auditService = new AuditService();
+
         $responseCode = ($status == "success") ? 200 : 400;
         if ($status == "unauthorized") $responseCode = 401;
         $responseData = [
@@ -17,25 +20,22 @@ class ResponseShelpers {
             'DATA' => $data
         ];
         if ($metadata) $responseData["METADATA"] = $metadata;
+
+        if (!in_array($responseCode, [401, 500, 503])) $auditService->record(request(), $responseData);
         return response()->json($responseData, $responseCode);
     }
 
-    public static function grsp($exec = null, $paramsExec = [], $rawResult, $user = null)
+    public static function grsp($exec = null, $paramsExec = [], $rawResult)
     {
         $response = null;
-        $username = null;
-        
-        if (isset($user['username'])) {
-            $username = $user['username'];
-        }
-        
+
         if (count($rawResult) > 1) {
             $response = $rawResult;
-            
-            Log::info("SP : " . $exec . ' - Params: ' . json_encode($paramsExec) . ' - Response: success - ' . json_encode($response) . ' - Request By: ' . $username);
+
+            Log::info("SP : " . $exec . ' - Params: ' . json_encode($paramsExec) . ' - Response: success - ' . json_encode($response));
             return $response;
         }
-        
+
         foreach($rawResult as $x) {
             if (is_object($x)) {
                 if (isset($x->STATUS) || isset($x->USERNAME)) {
@@ -63,11 +63,11 @@ class ResponseShelpers {
                 'DATA' => null
             ], 400);
 
-            Log::info("SP : " . $exec . ' - Params: ' . json_encode($paramsExec) . ' - Response: error - ' . json_encode($responseJson) . ' - Request By: ' . $username);
+            Log::info("SP : " . $exec . ' - Params: ' . json_encode($paramsExec) . ' - Response: error - ' . json_encode($responseJson));
             return $responseJson;
         }
 
-        Log::info("SP : " . $exec . ' - Params: ' . json_encode($paramsExec) . ' - Response: success - ' . json_encode($response) . ' - Request By: ' . $username);
+        Log::info("SP : " . $exec . ' - Params: ' . json_encode($paramsExec) . ' - Response: success - ' . json_encode($response));
         return $response;
     }
 }
