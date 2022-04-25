@@ -1,7 +1,6 @@
 <?php
 namespace Myhamdani\Shelpers;
 
-use App\Services\AuditService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Log;
@@ -9,8 +8,6 @@ use Illuminate\Support\Facades\Log;
 class ResponseShelpers {
     public static function generate($data = [], $message = "", $code = "00", $status = "success", $metadata = null): JsonResponse
     {
-        $auditService = new AuditService();
-
         $responseCode = ($status == "success") ? 200 : 400;
         if ($status == "unauthorized") $responseCode = 401;
         $responseData = [
@@ -21,7 +18,6 @@ class ResponseShelpers {
         ];
         if ($metadata) $responseData["METADATA"] = $metadata;
 
-        if (!in_array($responseCode, [401, 500, 503])) $auditService->record(request(), $responseData);
         return response()->json($responseData, $responseCode);
     }
 
