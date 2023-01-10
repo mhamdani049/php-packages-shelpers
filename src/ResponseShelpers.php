@@ -44,9 +44,10 @@ class ResponseShelpers
             ];
         }
 
-        if (!in_array($responseCode, [401, 500, 503])) {
-            $auditService->record(request(), $responseData);
-        }
+        //if (!in_array($responseCode, [401, 500, 503])) {
+        //    $auditService->record(request(), $responseData);
+        //}
+        
         return response()->json($responseData, $responseCode);
     }
 
