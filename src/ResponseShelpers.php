@@ -40,6 +40,7 @@ class ResponseShelpers
         if ($status == 'error' && $errorDetail == null) {
             $responseData['ERRORS'] = [
                 'TYPE' => 'Stacktrace',
+                'INFO' => '',
                 'DATA' => $data,
             ];
         }
