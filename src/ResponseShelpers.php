@@ -1,7 +1,7 @@
 <?php
 namespace Myhamdani\Shelpers;
 
-use App\Services\AuditService;
+//use App\Services\AuditService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Log;
@@ -16,7 +16,7 @@ class ResponseShelpers
         $metadata = null,
         $errorDetail = null
     ): JsonResponse {
-        $auditService = new AuditService();
+        //$auditService = new AuditService();
 
         $responseCode = $status == 'success' ? 200 : 400;
         if ($status == 'unauthorized') {
